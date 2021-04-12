@@ -1,0 +1,55 @@
+{
+    "This Is a Course":{
+        "This Is Chapter 1":{
+            "This Is Chapter 1.1":{
+                "This Is Knowledge Point 1":{
+
+                },
+                "This Is Knowledge Point 2":{
+
+                }
+
+            },
+            "This Is Chapter 1.2":{
+                "This Is Knowledge Point 1":{
+
+                },
+                "This Is Knowledge Point 2":{
+                    
+                } 
+            }
+
+        },
+        "This Is Chapter 2":{
+            "This Is Chapter 2.1":{
+                "This Is Knowledge Point 1":{
+
+                },
+                "This Is Knowledge Point 2":{
+
+                }
+
+            }
+        },
+        "This Is Chapter 3":{
+            "This Is Chapter 3.1":{
+                "This Is Knowledge Point 1":{
+
+                },
+                "This Is Knowledge Point 2":{
+
+                }
+
+            },
+            "This Is Chapter 3.2":{
+                "This Is Knowledge Point 1":{
+
+                },
+                "This Is Knowledge Point 2":{
+                    
+                } 
+            }
+        }
+
+    }
+}
