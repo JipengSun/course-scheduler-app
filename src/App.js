@@ -1,11 +1,12 @@
 import React from 'react'
-
+import 'rbx/index.css';
+import {Button, Container, Title} from 'rbx';
 const schedule = {
   'title':'CS Courses for 2020-2021',
   'courses':[
     {
       'id':'F101',
-      'title':'CS Algorithm',
+      'title':'Algorithm',
       'meets':'MWF 11:00-11:50'
     },
     {
@@ -13,18 +14,24 @@ const schedule = {
       'title':'Database',
       'meets':'MWF 12:00-13:50' 
 
+    },
+    {
+      'id':'F111',
+      'title':'Operating Systems',
+      'meets':'MWF 13:00-14:50' 
+
     }
   ]
   
 };
 
 const Banner = ({ title }) => (
-  <h1>{ title }</h1>
+  <Title>{ title }</Title>
 );
 const CourseList = ({courses}) =>(
-  <div>
+  <Button.Group>
     { courses.map(course => <Course course = {course}/>)}
-  </div>
+  </Button.Group>
 );
 const terms = {F:'Fall',W:'Winter',S:'Spring'};
 
@@ -37,15 +44,15 @@ const getCourseNumber = course=>(
 );
 
 const Course = ({course}) =>(
-  <button>
+  <Button>
     {getCourseTerm(course)} CS {getCourseNumber(course)}:{course.title}
-   </button>
+   </Button>
 )
 const App = () => (
-  <div>
+  <Container>
     <Banner title = {schedule.title}/>
     <CourseList courses={schedule.courses}/>
-  </div>
+  </Container>
 );
 
 export default App;
