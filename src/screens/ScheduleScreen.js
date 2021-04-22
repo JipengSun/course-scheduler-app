@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import 'rbx/index.css';
 import {Container, Title} from 'rbx';
-import firebase from 'firebase/app';
+//import firebase from 'firebase/app';
 import 'firebase/database';
 import CourseList from '../components/CourseList';
 
@@ -65,7 +65,7 @@ const ScheduleScreen = () =>{
       fetchSchedule();
     }
       ,[])
-    
+    /*
     const firebaseConfig = {
       apiKey: "AIzaSyAXHWl5sPCzsNBSeTco_ZZ5x2vzytBx2Wc",
       authDomain: "coursescheduler-faaa2.firebaseapp.com",
@@ -78,6 +78,7 @@ const ScheduleScreen = () =>{
     };
     
     //firebase.initializeApp(firebaseConfig);
+    */
   
     return(
       <Container>
