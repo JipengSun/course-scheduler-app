@@ -5,10 +5,12 @@ import {Container, Title} from 'rbx';
 import 'firebase/database';
 import CourseList from '../components/CourseList';
 
+/*
+The Schedule Screen does the following jobs:
+1. Draw the schedule screen
+2. Pull the remote JSON data and modify it to a state data
+*/
 
-const Banner = ({ title }) => (
-  <Title>{ title || '[loading...]'}</Title>
-);
 
 /*
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions/Cheatsheet
@@ -51,6 +53,10 @@ const addScheduleTimes = schedule =>(
     courses: schedule.courses.map(addCourseTimes)
   }
 )
+
+const Banner = ({ title }) => (
+  <Title>{ title || '[loading...]'}</Title>
+);
 
 const ScheduleScreen = () =>{
     const url = 'https://courses.cs.northwestern.edu/394/data/cs-courses.php';

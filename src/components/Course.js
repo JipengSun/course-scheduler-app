@@ -3,6 +3,11 @@ import {Button} from 'rbx';
 import 'rbx/index.css';
 import 'firebase/database';
 
+/*
+The Course component does following jobs:
+1. The Course button implments conflict detection logic
+*/
+
 const terms = {F:'Fall',W:'Winter',S:'Spring'};
 const days = ['M','Tu','W','Th','F'];
 

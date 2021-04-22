@@ -3,6 +3,13 @@ import {Button} from 'rbx';
 import 'rbx/index.css';
 import React, {useState} from 'react'
 
+/*
+The CourseList components does folling jobs:
+1. Implment the CourseList function in ScheduleScreen
+2. It draws TermSelctor buttons group on the top and Courses Button Group below the TermSelctor
+3. It implements the term filtering and button color logic
+*/
+
 const terms = {F:'Fall',W:'Winter',S:'Spring'};
 
 const buttonColor = selected=>(
