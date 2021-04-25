@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import 'rbx/index.css';
 import {Container, Title} from 'rbx';
-//import firebase from 'firebase/app';
-//import 'firebase/database';
+import firebase from 'firebase/app';
+import 'firebase/database';
 import CourseList from '../components/CourseList';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 
@@ -52,7 +52,7 @@ const addCourseTimes = course => (
 const addScheduleTimes = schedule =>(
   {
     title: schedule.title,
-    courses: schedule.courses.map(addCourseTimes)
+    courses: Object.values(schedule.courses).map(addCourseTimes)
   }
 )
 
@@ -62,23 +62,6 @@ const Banner = ({ title }) => (
 
 
 const ScheduleScreen = ({navigation}) =>{
-    const url = 'https://courses.cs.northwestern.edu/394/data/cs-courses.php';
-    const [schedule, setSchedule] = useState({ title:'', courses:[]});
-    const view = (course)=>{
-      navigation.navigate('CourseDetailScreen',{course});
-    };
-
-    useEffect( ()=>{
-      const fetchSchedule = async ()=>{
-        const response = await fetch(url);
-        if (!response.ok) throw response;
-        const json = await response.json();
-        setSchedule(addScheduleTimes(json));
-      }
-      fetchSchedule();
-    }
-      ,[])
-    /*
     const firebaseConfig = {
       apiKey: "AIzaSyAXHWl5sPCzsNBSeTco_ZZ5x2vzytBx2Wc",
       authDomain: "coursescheduler-faaa2.firebaseapp.com",
@@ -89,15 +72,45 @@ const ScheduleScreen = ({navigation}) =>{
       appId: "1:751974336378:web:3566a3370d6786d503f8c3",
       measurementId: "G-99BTQQWGCY"
     };
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+      }
+    else {
+      firebase.app(); // if already initialized, use that one
+    }
+    const db = firebase.database().ref();
+  
+    const url = 'https://courses.cs.northwestern.edu/394/data/cs-courses.php';
+    const [schedule, setSchedule] = useState({ title:'', courses:[]});
+    const view = (course)=>{
+      navigation.navigate('CourseDetailScreen',{course});
+    };
+    /*
+    useEffect( ()=>{
+      const fetchSchedule = async ()=>{
+        const response = await fetch(url);
+        if (!response.ok) throw response;
+        const json = await response.json();
+        setSchedule(addScheduleTimes(json));
+      }
+      fetchSchedule();
+    }
+      ,[])
+      */
     
-    //firebase.initializeApp(firebaseConfig);
-    */
+    useEffect(()=>{
+      const handleData = snap =>{
+        if (snap.val()) setSchedule(addScheduleTimes(snap.val()));
+      }
+      db.on('value',handleData,error=> alert(error));
+      return () => {db.off('value',handleData);};
+    },[]);
   
     return(
       <Container>
         <SafeAreaView>
           <Banner title = {schedule.title}/>
-          <CourseList courses={schedule.courses} view = {view}/>
+          <CourseList courses={schedule.courses} view = {view} db={db}/>
         </SafeAreaView>
       </Container>
     )

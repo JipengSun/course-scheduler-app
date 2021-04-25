@@ -43,7 +43,7 @@ const TermSelector = ({state})=>(
     </Button.Group>
   );
 
-const CourseList = ({courses, view}) =>{
+const CourseList = ({courses, view, db}) =>{
     const [term,setTerm] = useState('Fall');
     const termCourses = courses.filter(course => term === getCourseTerm(course));
     const [selected, toggle] = useSelection();
@@ -56,7 +56,8 @@ const CourseList = ({courses, view}) =>{
             key={course.id} 
             course = {course}
             state = { {selected, toggle}}
-            view = {view}/>
+            view = {view}
+            db = {db}/>
           )}
         </Button.Group>
       </React.Fragment>
