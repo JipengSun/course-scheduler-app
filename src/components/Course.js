@@ -1,7 +1,7 @@
 import React from 'react'
 import {Button} from 'rbx';
 import 'rbx/index.css';
-import 'firebase/database';
+//import 'firebase/database';
 
 /*
 The Course component does following jobs:
@@ -52,14 +52,17 @@ const hoursOverlap = (hours1, hours2)=>{
   return Math.max(hours1.start, hours2.start) < Math.min(hours1.end, hours2.end)
 };
 
-const Course = ({course, state}) =>(
+const Course = ({course, state, view}) =>{
+  return(
     <Button 
       color = { buttonColor(state.selected.includes(course))}
-      onClick = {()=> state.toggle(course)}
+      onClick = {()=>{state.toggle(course)}}
+      onLongPress = {()=> view(course)}
       disabled = { hasConflict(course, state.selected)}
     >
       {getCourseTerm(course)} CS {getCourseNumber(course)}:{course.title}
      </Button>
   )
+}
 
 export default Course;
