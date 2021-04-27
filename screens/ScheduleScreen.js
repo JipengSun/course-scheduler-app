@@ -4,8 +4,6 @@ import {Container, Title} from 'rbx';
 //import firebase from 'firebase/app';
 //import 'firebase/database';
 import CourseList from '../components/CourseList';
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-
 /*
 The Schedule Screen does the following jobs:
 1. Draw the schedule screen
