@@ -1,10 +1,12 @@
 import React, {useState, useEffect} from 'react'
 import 'rbx/index.css';
-import {Container, Title} from 'rbx';
+import {Container, Message, Title, Button} from 'rbx';
 import firebase from 'firebase/app';
 import 'firebase/database';
+import 'firebase/auth';
 import CourseList from '../components/CourseList';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import  StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 
 
 /*
@@ -55,11 +57,40 @@ const addScheduleTimes = schedule =>(
     courses: Object.values(schedule.courses).map(addCourseTimes)
   }
 )
+const Welcome = ({user})=>(
+  <Message color='info'>
+    <Message.Header>
+      Welcome, {user.displayName}
+      <Button primary onClick={()=>firebase.auth().signOut()}>
+        Log Out
+      </Button>
+    </Message.Header>
+  </Message>
+)
 
-const Banner = ({ title }) => (
-  <Title>{ title || '[loading...]'}</Title>
+const SignIn = ()=>(
+  <StyledFirebaseAuth
+    uiConfig={uiConfig}
+    firebaseAuth={firebase.auth()}
+  />
 );
 
+const Banner = ( {user,title} ) => (
+  <React.Fragment>
+    {user? <Welcome user={user}/>:<SignIn/>}
+    <Title>{ title || '[loading...]'}</Title>
+  </React.Fragment>
+);
+
+const uiConfig = {
+  signInFlow:'popup',
+  signInOptions:[
+    firebase.auth.GoogleAuthProvider.PROVIDER_ID
+  ],
+  callbacks:{
+    signInSuccessWithAuthResult:()=>false
+  }
+};
 
 const ScheduleScreen = ({navigation}) =>{
     const firebaseConfig = {
@@ -82,9 +113,12 @@ const ScheduleScreen = ({navigation}) =>{
   
     const url = 'https://courses.cs.northwestern.edu/394/data/cs-courses.php';
     const [schedule, setSchedule] = useState({ title:'', courses:[]});
+    const [user, setUser] = useState(null);
     const view = (course)=>{
       navigation.navigate('CourseDetailScreen',{course});
     };
+
+
     /*
     useEffect( ()=>{
       const fetchSchedule = async ()=>{
@@ -105,12 +139,16 @@ const ScheduleScreen = ({navigation}) =>{
       db.on('value',handleData,error=> alert(error));
       return () => {db.off('value',handleData);};
     },[]);
+
+    useEffect(()=>{
+      firebase.auth().onAuthStateChanged(setUser);
+    },[]);
   
     return(
       <Container>
         <SafeAreaView>
-          <Banner title = {schedule.title}/>
-          <CourseList courses={schedule.courses} view = {view} db={db}/>
+          <Banner user = {user} title = {schedule.title}/>
+          <CourseList courses={schedule.courses} view = {view} db={db} user = {user}/>
         </SafeAreaView>
       </Container>
     )

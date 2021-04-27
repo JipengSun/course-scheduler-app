@@ -5,7 +5,8 @@ import {Container, Title} from 'rbx';
 //import 'firebase/database';
 import CourseList from '../components/CourseList';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
-
+import 'firebase/auth';
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 
 /*
 The Schedule Screen does the following jobs:

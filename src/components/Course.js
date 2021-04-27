@@ -79,12 +79,12 @@ const moveCourse = (course,db )=>{
 
 }
 
-const Course = ({course, state, view, db}) =>{
+const Course = ({course, state, view, db, user}) =>{
   return(
     <Button 
       color = { buttonColor(state.selected.includes(course))}
       onClick = {()=>{state.toggle(course)}}
-      onDoubleClick = {() => moveCourse(course,db)}
+      onDoubleClick = {user? () => moveCourse(course,db):null}
       onLongPress = {()=> view(course)}
       disabled = { hasConflict(course, state.selected)}
     >
