@@ -56,7 +56,6 @@ const addScheduleTimes = schedule =>(
 
 const ScheduleScreen = ({navigation}) =>{
 
-    const db = firebase.database().ref();
     const [schedule, setSchedule] = useState({ title:'', courses:[]});
     const [user, setUser] = useState(null);
     const view = (course)=>{
@@ -64,12 +63,14 @@ const ScheduleScreen = ({navigation}) =>{
     };
 
     useEffect(()=>{
+      const db = firebase.database().ref();
       const handleData = snap =>{
         if (snap.val()) setSchedule(addScheduleTimes(snap.val()));
       }
       db.on('value',handleData,error=> alert(error));
       return () => {db.off('value',handleData);}
-    },[]);
+    },[]
+    );
 
     useEffect(()=>{
       firebase.auth().onAuthStateChanged(setUser);
