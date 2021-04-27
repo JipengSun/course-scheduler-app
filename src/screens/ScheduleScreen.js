@@ -1,13 +1,9 @@
 import React, {useState, useEffect} from 'react'
 import 'rbx/index.css';
-import {Container, Message, Title, Button} from 'rbx';
-import firebase from 'firebase/app';
-import 'firebase/database';
-import 'firebase/auth';
+import {Container} from 'rbx';
 import CourseList from '../components/CourseList';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
-import  StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-
+import Banner from '../components/Banner'
+import firebase from '../shared/firebase'
 
 /*
 The Schedule Screen does the following jobs:
@@ -57,87 +53,22 @@ const addScheduleTimes = schedule =>(
     courses: Object.values(schedule.courses).map(addCourseTimes)
   }
 )
-const Welcome = ({user})=>(
-  <Message color='info'>
-    <Message.Header>
-      Welcome, {user.displayName}
-      <Button primary onClick={()=>firebase.auth().signOut()}>
-        Log Out
-      </Button>
-    </Message.Header>
-  </Message>
-)
-
-const SignIn = ()=>(
-  <StyledFirebaseAuth
-    uiConfig={uiConfig}
-    firebaseAuth={firebase.auth()}
-  />
-);
-
-const Banner = ( {user,title} ) => (
-  <React.Fragment>
-    {user? <Welcome user={user}/>:<SignIn/>}
-    <Title>{ title || '[loading...]'}</Title>
-  </React.Fragment>
-);
-
-const uiConfig = {
-  signInFlow:'popup',
-  signInOptions:[
-    firebase.auth.GoogleAuthProvider.PROVIDER_ID
-  ],
-  callbacks:{
-    signInSuccessWithAuthResult:()=>false
-  }
-};
 
 const ScheduleScreen = ({navigation}) =>{
-    const firebaseConfig = {
-      apiKey: "AIzaSyAXHWl5sPCzsNBSeTco_ZZ5x2vzytBx2Wc",
-      authDomain: "coursescheduler-faaa2.firebaseapp.com",
-      databaseURL: "https://coursescheduler-faaa2-default-rtdb.firebaseio.com",
-      projectId: "coursescheduler-faaa2",
-      storageBucket: "coursescheduler-faaa2.appspot.com",
-      messagingSenderId: "751974336378",
-      appId: "1:751974336378:web:3566a3370d6786d503f8c3",
-      measurementId: "G-99BTQQWGCY"
-    };
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-      }
-    else {
-      firebase.app(); // if already initialized, use that one
-    }
+
     const db = firebase.database().ref();
-  
-    const url = 'https://courses.cs.northwestern.edu/394/data/cs-courses.php';
     const [schedule, setSchedule] = useState({ title:'', courses:[]});
     const [user, setUser] = useState(null);
     const view = (course)=>{
       navigation.navigate('CourseDetailScreen',{course});
     };
 
-
-    /*
-    useEffect( ()=>{
-      const fetchSchedule = async ()=>{
-        const response = await fetch(url);
-        if (!response.ok) throw response;
-        const json = await response.json();
-        setSchedule(addScheduleTimes(json));
-      }
-      fetchSchedule();
-    }
-      ,[])
-      */
-    
     useEffect(()=>{
       const handleData = snap =>{
         if (snap.val()) setSchedule(addScheduleTimes(snap.val()));
       }
       db.on('value',handleData,error=> alert(error));
-      return () => {db.off('value',handleData);};
+      return () => {db.off('value',handleData);}
     },[]);
 
     useEffect(()=>{
@@ -146,10 +77,8 @@ const ScheduleScreen = ({navigation}) =>{
   
     return(
       <Container>
-        <SafeAreaView>
-          <Banner user = {user} title = {schedule.title}/>
-          <CourseList courses={schedule.courses} view = {view} db={db} user = {user}/>
-        </SafeAreaView>
+        <Banner user = {user} title = {schedule.title}/>
+        <CourseList courses={schedule.courses} view = {view} user = {user}/>
       </Container>
     )
      

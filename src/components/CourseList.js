@@ -1,7 +1,8 @@
-import Course from './Course'
+import Course from './Course';
+import {getCourseTerm} from './Course/times'
 import {Button} from 'rbx';
-import 'rbx/index.css';
 import React, {useState} from 'react'
+import TermSelector from './TermSelector'
 
 /*
 The CourseList components does folling jobs:
@@ -10,15 +11,6 @@ The CourseList components does folling jobs:
 3. It implements the term filtering and button color logic
 */
 
-const terms = {F:'Fall',W:'Winter',S:'Spring'};
-
-const buttonColor = selected=>(
-    selected ? 'success' : null
-  );
-
-const getCourseTerm = course =>(
-  terms[course.id.charAt(0)]
-);
 // selected is an array store the selected courses
 const useSelection = ()=>{
     const [selected, setSelected] = useState([]);
@@ -29,21 +21,7 @@ const useSelection = ()=>{
   
 }
 
-const TermSelector = ({state})=>(
-    <Button.Group hasAddons>
-      {
-        Object.values(terms).map( value => 
-        <Button 
-          key = {value}
-          color = {buttonColor(value === state.term)}
-          onClick = { () => state.setTerm(value)}
-        > {value} </Button>
-        )
-      }
-    </Button.Group>
-  );
-
-const CourseList = ({courses, view, db, user}) =>{
+const CourseList = ({courses, view, user}) =>{
     const [term,setTerm] = useState('Fall');
     const termCourses = courses.filter(course => term === getCourseTerm(course));
     const [selected, toggle] = useSelection();
@@ -57,7 +35,6 @@ const CourseList = ({courses, view, db, user}) =>{
             course = {course}
             state = { {selected, toggle}}
             view = {view}
-            db = {db}
             user = {user}/>
           )}
         </Button.Group>
